@@ -1,4 +1,0 @@
-q0 -> fa belum membaca simbol apapun
-q1 -> fa membaca simbol a,b,c,d,...,z,A,B,C,...,Z,$,_
-q2 -> fa membaca simbol 
-qf -> 

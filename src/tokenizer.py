@@ -44,7 +44,9 @@ token_list = [
     (r'\;', ' ')
 ]
 
-list_operator = ['!', '~', '-', '+', '++', '--', '+', '-', '*', '**', '/', '%', '>>', '<<', '>>>', '==', '===', '!=', '!==', '>', '<', '<=', '>=', '&&', '||', '??','?',':' ,'&', '|', '~', '^', '=', '+=', '-=', '*=', '**=', '/=', '%=', '>>=', '<<=', '>>>=']
+list_operator = ['!', '~', '-', '+', '++', '--', '+', '-', '*', '**', '/', '%', '>>', '<<', '>>>', '==', '===', '!=', '!==', '>',
+                 '<', '<=', '>=', '&&', '||', '??', '?', ':', '&', '|', '~', '^', '=', '+=', '-=', '*=', '**=', '/=', '%=', '>>=', '<<=', '>>>=']
+
 
 def destruct_expr(temp):
     curr_word = ''
@@ -81,7 +83,7 @@ def generate_token(file_name):
                 result = re.sub(pattern, tag, result)
         tempResult = result.split(' ')
         tempResult = [x for x in tempResult if x and x != '\n']
-        if tempResult[0] == '//' :
+        if tempResult[0] == '//':
             continue
         flag_varname = True
         flag_expression = False
@@ -90,7 +92,7 @@ def generate_token(file_name):
         for i in range(len(tempResult)):
             flag = False
             if tempResult[i] == '//':
-                break 
+                break
             for token in token_list:
                 pattern, tag = token
                 if tag.strip() == tempResult[i]:
@@ -105,7 +107,7 @@ def generate_token(file_name):
                     list_token.append('EXPR')
                     curr_word = ''
                     amt = 0
-                else :
+                else:
                     amt += 1
                     list_varname.append(tempResult[i])
                     tempResult[i] = 'VAR_NAME'
@@ -147,11 +149,12 @@ def generate_token(file_name):
     for varname in list_varname_fix:
         file_write_varname.write(str(varname) + " ")
     file_write_varname.close()
-    file_write_exp= open(path + "/out/expResult.txt", 'w')
+    file_write_exp = open(path + "/out/expResult.txt", 'w')
     for exp in list_exp_fix:
         file_write_exp.write(str(exp) + " ")
     file_write_exp.close()
     # print(list_token_fix, list_varname_fix, list_exp_fix)
     return list_token, list_varname, list_exp
+
 
 generate_token('test.txt')
