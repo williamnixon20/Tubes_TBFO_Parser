@@ -1,1 +1,1 @@
-console.log("a" + a);
+throw 500; //test
