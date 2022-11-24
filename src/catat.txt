@@ -1,0 +1,127 @@
+let Baka = 2 = 3;
+LET ['Baka'] EQ [2,=,3]
+let baka aho = baka aho + 2
+let ["baka aho"]
+let varname eq expr
+let varname varname 
+
+b function test (a , b) {
+
+    return 0;
+}
+function tes (a + 1) {
+
+}
+varname FUNCTION varname ( [a] COMA [b] ) LCB RET [0] LC
+a = (1 + 1) * 2
+varname EQ EXP
+function b(1,2,3){}
+FUNCTION varname LB varname COMA varname COMA varname RB LCB RCB
+function b(a)
+return false = 1;
+RET FALSE EQ EXP;
+
+nsole.log("A");
+varname.varnamelb expr rb
+objmethod open expr close
+1employee.bbla
+objproperty
+varname dot varname 
+
+a.b.c.d;
+1+1.b;
+
+message() + message;
+[message(),+,message]
+varName = [message]
+expName = [+message]
+curr_word = ''
+fv = true
+fe = false
+curr_word = 'message'
+(
+VARNAME
+fv = true
+fe = false
+LB
+curr_word = ''
+)
+fv = true
+fe = false
+curr_word = ''
+RB
++
+fv = false
+fe = true
+curr_word = '+message'
+;
+fv = false;
+fe = true;
+curr_word = ''
+VARNAME LB RB EXPR
+
+console.log('234');
+
+"jsdlfksd"
+'dks"""fjlksd'
+'a"
+
+1 = 2 ? 1 + 1 + aba;
+1=2?1+1+abs
+[1=2?1+1+aba]
+a = 1 + 1;
+flag_varname = true;
+flag_expresion = false;
+curr_word = ''
+a=1+1;
+a
+fv = true;
+fe = false;
+curr_word = 'a';
+=
+fv = false;
+fe = true;
+push_to_v;
+curr_word = '';
+1
+fv = false;
+fe = true;
+curr_word = '1';
++
+fv = false;
+fe = true;
+curr_word = '1+';
+1
+fv = false;
+fe = true;
+curr_word = '1+1'; [[1,+,1], [...], [...]]
+
+functiona a(b,c){
+    i + 1;
+}
+
+-- functiona a(b,c){
+-- ['functiona', 'a(b,c){\n']
+flag_varname = true
+flag_expressin = false
+curr_word = ''
+list_varname = []
+list_expr = []
+- f
+curr_word = 'f'
+- u
+curr_word = 'u'
+- n 
+curr_word = 'n'
+- c
+curr_word = 'c'
+- t
+curr_word = 't'
+- i
+curr_word = 'i'
+- o
+curr_word = 'o'
+- n
+curr_word = 'n'
+- a
+curr_word = 'a'

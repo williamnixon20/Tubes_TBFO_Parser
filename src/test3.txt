@@ -1,0 +1,16 @@
+const action = 'say_hello';
+switch (action) {
+  case 'test': { // added brackets
+    const message = 'hello';
+    console.log(message);
+    break;
+  } // added brackets
+  case 'say_hi': { // added brackets
+    const message = 'hi';
+    console.log(message);
+    break;
+  } // added brackets
+  default: { // added brackets
+    console.log('Empty action received.');
+  } // added brackets
+}
