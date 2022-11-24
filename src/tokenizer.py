@@ -249,6 +249,3 @@ def generate_token(file_name):
         file_write_exp.write(str(exp) + " ")
     file_write_exp.close()
     return list_token_fix, list_varname_fix, list_exp_fix
-
-
-generate_token("test.txt")
