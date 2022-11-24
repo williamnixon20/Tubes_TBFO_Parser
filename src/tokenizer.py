@@ -87,6 +87,51 @@ list_operator = [
     ">>>=",
 ]
 
+list_operator = [
+    "!",
+    "~",
+    "-",
+    "+",
+    "++",
+    "--",
+    "+",
+    "-",
+    "*",
+    "**",
+    "/",
+    "%",
+    ">>",
+    "<<",
+    ">>>",
+    "==",
+    "===",
+    "!=",
+    "!==",
+    ">",
+    "<",
+    "<=",
+    ">=",
+    "&&",
+    "||",
+    "??",
+    "?",
+    ":",
+    "&",
+    "|",
+    "~",
+    "^",
+    "=",
+    "+=",
+    "-=",
+    "*=",
+    "**=",
+    "/=",
+    "%=",
+    ">>=",
+    "<<=",
+    ">>>=",
+]
+
 
 def destruct_expr(temp):
     curr_word = ""
@@ -206,4 +251,4 @@ def generate_token(file_name):
     return list_token_fix, list_varname_fix, list_exp_fix
 
 
-# generate_token('test.txt')
+generate_token("test.txt")
