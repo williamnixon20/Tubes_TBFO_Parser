@@ -1,0 +1,5 @@
+try {
+    let a= 1 + 2;
+} catch (a == 2) {
+   a return res.status(400 + 200);
+}
