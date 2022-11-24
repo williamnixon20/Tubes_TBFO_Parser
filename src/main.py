@@ -1,6 +1,7 @@
 from grammar.cnf import getGrammar
 from cyk import cyk
 from tokenizer import generate_token
+from fa import fa
 
 import argparse
 
@@ -18,6 +19,7 @@ def check():
     tokens = [x.lower() for x in tokens]
     print(tokens)
     cyk(tokens, grammar)
+    fa(varnames, expressions)
 
 
 if __name__ == "__main__":

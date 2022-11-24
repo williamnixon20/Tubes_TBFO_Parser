@@ -222,4 +222,15 @@ def evalAllExpression(arrInputs: str):
     return __faEXP.evalAll(arrInputs)
 
 
-print(evalAllExpression(["x + 4 == 1".split(" "), "b ? x : a".split(" ")]))
+def fa(varnames, expressions):
+    if (evalAllVariable(varnames)):
+        print("VARIABLE OK")
+    else:
+        print("VARIABLE NOT OK")
+    print("\n")
+    if (evalAllExpression(expressions)):
+        print("EXPRESSION OK")
+    else:
+        print("EXPRESSION NOT OK")
+
+# print(evalAllExpression(["x + 4 == 1".split(" "), "b ? x : a".split(" ")]))
