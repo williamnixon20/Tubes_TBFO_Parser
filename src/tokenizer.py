@@ -158,6 +158,8 @@ def generate_token(file_name):
     list_varname_fix = []
     list_exp_fix = []
     for character in characters:
+        if len(character) == 0 or len(character) == 1:
+            continue
         list_token = []
         list_varname = []
         list_exp = []
