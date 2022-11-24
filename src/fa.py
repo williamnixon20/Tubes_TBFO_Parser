@@ -1,3 +1,5 @@
+import re
+
 class __FA:
     def __init__(self, name: str, startState: str, finalState: str, transition):
         self.name = name
@@ -8,7 +10,7 @@ class __FA:
     def evaluate(self, inputs: str):
         currentState = self.startState
         for symbol in inputs:
-            print(self.name, currentState, symbol)
+            # print(self.name, currentState, symbol)
             currentState = self.transition(currentState, symbol)
             if not currentState:
                 break
@@ -28,6 +30,8 @@ def __isAlpha(symbol: str):
 def __isDigit(symbol: str):
     return ('0' <= symbol <= '9')
 
+def __isString(symbol: str):
+    return re.search("\'.+\'", symbol) or re.search("\".+\"", symbol)
 
 def __transitionFAVariable(state: str, symbol: str):
     if state == 'q0':
@@ -73,7 +77,7 @@ def __transitionFAExp(state: str, symbol: str):
                 '>>>', '==', '===', '!=', '!==', '>', '<', '<=', '>=', '&&', '||', '??', '&', '|', '~', '^']
     assignmentOp = ['=', '+=', '-=', '*=',
                     '**=', '/=', '%=', '>>=', '<<=', '>>>=']
-
+    print("EXPRESSION", "STATE", state, "SYMBOL", symbol)
     if state == 'q0':
         if isVariable(symbol):
             return 'q1'
@@ -96,14 +100,14 @@ def __transitionFAExp(state: str, symbol: str):
             return 'q5'
         elif isVariable(symbol):
             return 'q6'
-        elif isNumber(symbol):
+        elif isNumber(symbol) or __isString(symbol):
             return 'q4'
     elif state == 'q4':
         return __transitionFAExp('q8', symbol)
     elif state == 'q5':
         if isVariable(symbol):
             return 'q6'
-        elif isNumber(symbol):
+        elif isNumber(symbol) or __isString(symbol):
             return 'q4'
     elif state == 'q6':
         if symbol in incrementDecrement:
@@ -141,7 +145,7 @@ def __transitionFAExp(state: str, symbol: str):
             return 'q15'
         elif isVariable(symbol):
             return 'q16'
-        elif isNumber(symbol):
+        elif isNumber(symbol) or __isString(symbol):
             return 'q14'
     elif state == 'q14':
         if symbol == ':':
@@ -151,7 +155,7 @@ def __transitionFAExp(state: str, symbol: str):
     elif state == 'q15':
         if isVariable(symbol):
             return 'q16'
-        elif isNumber(symbol):
+        elif isNumber(symbol) or __isString(symbol):
             return 'q14'
     elif state == 'q16':
         if symbol == ':':
@@ -199,11 +203,23 @@ __faEXP = __FA("EXPRESSION", 'q0',
 
 
 def isVariable(inputs: str):
-    return __faVAR.evaluate(inputs)
+    verdict = __faVAR.evaluate(inputs)
+    if (verdict):
+        print("VARIABLE", inputs, "OK")
+    else:
+        print("VARIABLE", inputs, "NOT OK")
+
+    return verdict
 
 
 def isNumber(inputs: str):
-    return __faNUM.evaluate(inputs)
+    verdict = __faNUM.evaluate(inputs)
+    if (verdict):
+        print("NUMBER", inputs, "OK")
+    else:
+        print("NUMBER", inputs, "NOT OK")
+
+    return verdict
 
 
 def isExpression(inputs: str):
@@ -232,5 +248,3 @@ def fa(varnames, expressions):
         print("EXPRESSION OK")
     else:
         print("EXPRESSION NOT OK")
-
-# print(evalAllExpression(["x + 4 == 1".split(" "), "b ? x : a".split(" ")]))
