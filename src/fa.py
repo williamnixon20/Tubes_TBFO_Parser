@@ -31,7 +31,12 @@ def __isDigit(symbol: str):
     return ('0' <= symbol <= '9')
 
 def __isString(symbol: str):
-    return re.search("\'.+\'", symbol) or re.search("\".+\"", symbol)
+    verdict = re.search("\'.+\'", symbol) or re.search("\".+\"", symbol) or symbol == '""' or symbol == "''"
+    if (verdict):
+        print("STRING")
+    else:
+        print("NOT STRING")
+    return verdict
 
 def __transitionFAVariable(state: str, symbol: str):
     if state == 'q0':
@@ -87,7 +92,7 @@ def __transitionFAExp(state: str, symbol: str):
         if symbol in assignmentOp:
             return 'q2'
         else:
-            return __transitionFAExp('q8', symbol)
+            return __transitionFAExp('q6', symbol)
     elif state == 'q2':
         if isVariable(symbol):
             return 'q1'
@@ -173,7 +178,7 @@ def __transitionFAExp(state: str, symbol: str):
         elif symbol in assignmentOp:
             return 'q19'
         else:
-            return __transitionFAExp('q21', symbol)
+            return __transitionFAExp('q16', symbol)
     elif state == 'q19':
         if isVariable(symbol):
             return 'q18'
@@ -199,7 +204,7 @@ __faVAR = __FA("VARIABLE", 'q0',
                ['qf'], __transitionFAVariable)
 __faNUM = __FA("NUMBER", 'q0', ['q1', 'q4'], __transitionFANumber)
 __faEXP = __FA("EXPRESSION", 'q0',
-               ['q1', 'q4', 'q6'], __transitionFAExp)
+               ['q1', 'q4', 'q6', 'q10'], __transitionFAExp)
 
 
 def isVariable(inputs: str):
