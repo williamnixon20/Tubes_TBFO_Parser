@@ -8,6 +8,10 @@ switch (action) {
         console.log("hi");
         break;
     // added brackets
+    case 1:
+
+    case 5:
+
     default:
         let b = 5;
     // added brackets
