@@ -39,6 +39,8 @@ token_list = [
     (r"\'.+\'", " STRING "),
     (r"\".+\"", " STRING "),
     (r"\n", ""),
+    (r"[ ]*\/\/.+", ""),
+    # (r"\/\/.+", ""),
     (r"\;(?!.+)", " "),
     (r"\;", " SEMI_COL "),
 ]
@@ -159,8 +161,8 @@ def generate_token(file_name):
     list_varname_fix = []
     list_exp_fix = []
     for character in characters:
-        if len(character) == 0 or len(character) == 1:
-            continue
+        # if len(character) == 0 or len(character) == 1:
+        #     continue
         list_token = []
         list_varname = []
         list_exp = []
@@ -173,12 +175,13 @@ def generate_token(file_name):
                 result = re.sub(pattern, tag, result)
         tempResult = result.split(" ")
         tempResult = [x for x in tempResult if x and x != "\n"]
-        if len(character) > 1 and tempResult[0] == "//":
-            continue
+        # if len(character) > 1 and tempResult[0] == "//":
+        #     continue
         flag_varname = True
         flag_expression = False
         curr_word = ""
         amt = 0
+        print(tempResult)
         for i in range(len(tempResult)):
             flag = False
             if tempResult[i] == "//":
