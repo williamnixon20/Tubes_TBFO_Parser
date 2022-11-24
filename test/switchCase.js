@@ -4,7 +4,7 @@ switch (action) {
         let a = 2 + 3;
         break;
     // added brackets
-    case "say_hi":
+    case 5:
         console.log("hi");
         break;
     // added brackets
