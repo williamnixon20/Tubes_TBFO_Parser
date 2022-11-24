@@ -10,7 +10,7 @@ token_list = [
     (r"\[", " LSB "),
     (r"\]", " RSB "),
     # Operators
-    (r"(?<![-+!~*/%<>&|])\=(?![-+!~*/%<>&|])", " EQ "),
+    (r"(?<![-+!~*/%<>&|=])\=(?![-+!~*/%<>&|=])", " EQ "),
     (r"\,", " COMMA "),
     (r"\:", " COLON "),
     # Reserved
@@ -197,7 +197,7 @@ def generate_token(file_name):
                 ):
                     list_token = list_token[: len(list_token) - amt]
                     list_varname = list_varname[: len(list_varname) - amt]
-                    if i != 0 and (tempResult[i - 1] != 'VAR' and tempResult[i - 1] != 'CONST' and tempResult[i - 1] != 'LET') :
+                    if i == 0 or (i != 0 and (tempResult[i - 1] != 'VAR' and tempResult[i - 1] != 'CONST' and tempResult[i - 1] != 'LET')) :
                         print(tempResult[i - 1])
                         list_token.append("EXPR")
                         list_exp.append(destruct_expr([x for x in curr_word]))
