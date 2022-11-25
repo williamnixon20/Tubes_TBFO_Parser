@@ -7,6 +7,7 @@ matrix_dp = []
 
 
 def process_terminals(token_index):
+    global matrix_dp
     for token_left, productions in grammar.items():
         for production in productions:
             ## Bukan Terminal
@@ -20,6 +21,7 @@ def process_terminals(token_index):
 
 
 def process_previous(prev_token_idx, length_dp, token_idx):
+    global matrix_dp
     for token_left, productions in grammar.items():
         for production in productions:
             ## Skip terminal
@@ -42,6 +44,7 @@ def cyk(tokens_arg, grammar_arg):
     token_length = len(tokens)
 
     matrix_row = []
+    matrix_dp = []
     for temp in range(token_length):
         matrix_row.append(set([]))
 
@@ -53,10 +56,13 @@ def cyk(tokens_arg, grammar_arg):
         for prev_token_idx in range(token_idx, -1, -1):
             for length_dp in range(prev_token_idx, token_idx):
                 process_previous(prev_token_idx, length_dp, token_idx)
+        print("Progress: {}/{}".format(token_idx, token_length))
     if "VALID" in matrix_dp[0][token_length - 1]:
         print("CYK berhasil menvalidasi string.")
+        return True
     else:
         print("CYK gagal menvalidasi program.")
+        return False
 
 
 if __name__ == "__main__":

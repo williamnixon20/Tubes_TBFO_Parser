@@ -14,9 +14,12 @@ def check(filename):
     print("======================HASIL=========================")
     print(filename)
     tokens = [x.lower() for x in tokens]
-    cyk(tokens, grammar)
-    fa(varnames, expressions)
-    
+    cyk_res = cyk(tokens, grammar)
+    fa_res, fa_res2 = fa(varnames, expressions)
+    if cyk_res and fa_res and fa_res2:
+        print("ACCEPTED")
+    else:
+        print("REJECTED")
 
 
 if __name__ == "__main__":
