@@ -1,6 +1,6 @@
 for (let i = 0; i < 10; i++) {
     if (i === 3) {
-         break; 
+         break;
     }
-    text += "The number is " + i + "br";
-  }
+    text += "The number is " + i + "<br>";
+}
