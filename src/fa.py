@@ -58,21 +58,21 @@ def __transitionFANumber(state: str, symbol: str):
         if __isDigit(symbol):
             return 'q1'
         elif symbol == '.':
-            return 'q2'
+            return 'q4'
     elif state == 'q1':
         if __isDigit(symbol):
             return 'q1'
         elif symbol == '.':
-            return 'q3'
+            return 'q2'
     elif state == 'q2':
         if __isDigit(symbol):
-            return 'q4'
+            return 'q3'
     elif state == 'q3':
         if __isDigit(symbol):
-            return 'q4'
+            return 'q3'
     elif state == 'q4':
         if __isDigit(symbol):
-            return 'q4'
+            return 'q3'
 
 
 def __transitionFAExp(state: str, symbol: str):
@@ -201,7 +201,7 @@ def __transitionFAExp(state: str, symbol: str):
 
 __faVAR = __FA("VARIABLE", 'q0',
                ['qf'], __transitionFAVariable)
-__faNUM = __FA("NUMBER", 'q0', ['q1', 'q4'], __transitionFANumber)
+__faNUM = __FA("NUMBER", 'q0', ['q1', 'q2', 'q3'], __transitionFANumber)
 __faEXP = __FA("EXPRESSION", 'q0',
                ['q1', 'q4', 'q6', 'q10'], __transitionFAExp)
 
