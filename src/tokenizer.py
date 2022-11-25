@@ -117,7 +117,9 @@ list_operator = [
     '&=',
     '^=',
     '||=',
-    '??='
+    '??=',
+    '|=',
+    '&&=',
 ]
 
 def destruct_expr(strlist):
