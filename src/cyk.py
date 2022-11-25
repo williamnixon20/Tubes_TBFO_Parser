@@ -32,7 +32,6 @@ def process_previous(prev_token_idx, length_dp, token_idx):
                 continue
             ## Add to matrix
             matrix_dp[prev_token_idx][token_idx].add(token_left)
-            print(token_left)
 
 
 def cyk(tokens_arg, grammar_arg):
@@ -54,11 +53,10 @@ def cyk(tokens_arg, grammar_arg):
         for prev_token_idx in range(token_idx, -1, -1):
             for length_dp in range(prev_token_idx, token_idx):
                 process_previous(prev_token_idx, length_dp, token_idx)
-    print(matrix_dp[0][token_length - 1])
     if "VALID" in matrix_dp[0][token_length - 1]:
-        print("OK MANTAB")
+        print("CYK berhasil menvalidasi string.")
     else:
-        print("NO")
+        print("CYK gagal menvalidasi program.")
 
 
 if __name__ == "__main__":
