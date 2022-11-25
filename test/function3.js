@@ -1,5 +1,5 @@
-function hello(name) {
-     console.log("hello " + name);
+function hello(name, bobo) {
+    console.log(name);
+    return;
 }
 hello();
-hello("CSS", "HTML", "AAA", 4);

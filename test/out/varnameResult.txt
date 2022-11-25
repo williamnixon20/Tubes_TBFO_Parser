@@ -1,1 +1,0 @@
-pet myMethod pet console.log myMethod console.log 
