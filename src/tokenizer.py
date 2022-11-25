@@ -144,7 +144,6 @@ def generate_token(file_name):
     list_varname_fix = []
     list_exp_fix = []
     for character in characters:
-        print(character)
         # if len(character) == 0 or len(character) == 1:
         #     continue
         list_token = []
@@ -162,7 +161,6 @@ def generate_token(file_name):
                 result = re.sub(pattern, tag, result)
         tempResult = result.split(" ")
         tempResult = [x for x in tempResult if x and x != "\n"]
-        print("TEMPRES", tempResult)
         # if len(character) > 1 and tempResult[0] == "//":
         #     continue
         flag_varname = True
@@ -191,7 +189,6 @@ def generate_token(file_name):
                     list_varname = list_varname[: len(list_varname) - amt]
                     if i == 0 or (i != 0 and (tempResult[i - 1] != 'VAR' and tempResult[i - 1] != 'CONST' and tempResult[i - 1] != 'LET')) :
                         list_token.append("EXPR")
-                        print("curr", curr_word)
                         list_exp.append(destruct_expr(
                         curr_word.split(" ")))
                     else:
@@ -203,7 +200,6 @@ def generate_token(file_name):
                     flag_expression = True
                     flag_varname = False
                     flag_quest = True
-                    print("((((((((((LIST TOKEN", list_token)
                     list_token = list_token[:len(list_token) - amt]
                     list_varname = list_varname[:len(list_varname) - amt]
                     # # temp_list_varname = list_varname[len(list_varname) - amt:]
@@ -213,7 +209,6 @@ def generate_token(file_name):
                     #     list_exp.append(destruct_expr(curr_word.split(" ")))
                 else:
                     amt += 1
-                    print("________FDFD", curr_word.split())
                     list_varname.append(tempResult[i])
                     tempResult[i] = "VAR_NAME"
                     list_token.append(tempResult[i])
@@ -224,11 +219,9 @@ def generate_token(file_name):
                 or tempResult[i] == "CASE"
             ):
                 list_token = list_token[: len(list_token) - amt + 1]
-                print("cw1", curr_word.split())
                 if curr_word != "":
                     list_varname = list_varname[: len(list_varname) - amt]
                     if (flag_expression):
-                        print("YEAAAAAAAAAAAAAAA")
                         list_token.append("VAR_NAME")
                     list_varname.append(curr_word.rstrip())
                 list_token.append(tempResult[i])
@@ -238,7 +231,6 @@ def generate_token(file_name):
             elif flag_expression and not flag:
                 curr_word += tempResult[i] + " "
                 amt+=1
-                print("YEs", curr_word)
                 if i == len(tempResult) - 1 or tempResult[i + 1] == 'RSB':
                     if flag_quest:
                         list_token = list_token[:len(list_token) - amt - 1]
@@ -247,7 +239,6 @@ def generate_token(file_name):
                     list_token.append("EXPR")
                 elif tempResult[i] == '?' :
                     flag_quest = True
-                    print("((((((((((LIST TOKEN", list_token)
                     # list_token = list_token[:len(list_token) - amt]
                     list_varname = list_varname[:len(list_varname) - amt]
                     # # temp_list_varname = list_varname[len(list_varname) - amt:]
@@ -256,7 +247,6 @@ def generate_token(file_name):
                     #     list_exp = list_exp[:len(list_exp) - amt]
                     #     list_exp.append(destruct_expr(curr_word.split(" ")))
             elif flag_expression and (tempResult[i] == "RP" or tempResult[i] == 'COMMA' or tempResult[i] == 'SEMI_COL'):
-                print("CWWW", curr_word.split())
                 if curr_word != "":
                     list_exp.append(destruct_expr(curr_word.split(" ")))
                     list_token.append("EXPR")
@@ -265,9 +255,7 @@ def generate_token(file_name):
                 else:
                     list_token.append(tempResult[i]);
                 curr_word = ""
-                print("YESSS")
                 if flag_quest:
-                    print("YESSS")
                     list_token = list_token[:len(list_token) - amt]
                     list_exp = list_exp[:len(list_exp) - amt - 1]
                 if  tempResult[i] == 'RP':
@@ -275,7 +263,6 @@ def generate_token(file_name):
                     flag_varname = True
             else:
                 if not flag_expression:
-                    print("==============", tempResult[i])
                     if flag and i == len(tempResult) - 1 and tempResult[i] != 'CL' and tempResult[i] != 'CB' and tempResult[i] != 'RP' and tempResult[i] != 'RSB' and tempResult[i] != 'LP' and tempResult[i] != 'LSB' and tempResult[i] != 'BREAK' and tempResult[i] != 'CONTINUE' and tempResult[i] != 'RETURN' and tempResult[i] != 'COLON':
                         list_token = list_token[:len(list_token) - amt]
                         list_varname = list_varname[:len(list_varname) - amt]
@@ -295,7 +282,6 @@ def generate_token(file_name):
                     if temp_curr_word[0] == "LET" or temp_curr_word[0] == "VAR" or temp_curr_word[0] == "CONST":
                         list_token.append(temp_curr_word[0])
                         curr_word =  ""
-                    print("BEL", curr_word.split())
                     if i == len(tempResult) - 1 and tempResult[i] != "COLON":
                         list_token.append("EXPR")
                         list_exp.append(destruct_expr(curr_word.split()))
@@ -305,8 +291,6 @@ def generate_token(file_name):
                         list_token.append("EXPR")
                         list_token.append(tempResult[i])
                 # tempResult.pop(i)
-            print(list_token)
-        print(list_token)
         list_token_fix.extend(list_token)
         list_exp_fix.extend(list_exp)
         list_varname_fix.extend(list_varname)
@@ -324,7 +308,6 @@ def generate_token(file_name):
     for exp in list_exp_fix:
         file_write_exp.write(str(exp) + " ")
     file_write_exp.close()
-    print(list_token_fix, list_varname_fix, list_exp_fix)
     return list_token_fix, list_varname_fix, list_exp_fix
 
-generate_token('../test/test.js')
+# generate_token('../test/test.js')
