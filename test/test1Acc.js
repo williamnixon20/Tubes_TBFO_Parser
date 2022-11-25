@@ -9,9 +9,10 @@ function do_something(x) {
         } else {
             return 2;
         }
+        
     } else if (x == 32) {
         return 4;
     } else {
-        return "Momen bab";
+        return 5;
     }
 }
