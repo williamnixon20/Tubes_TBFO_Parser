@@ -37,8 +37,8 @@ token_list = [
     (r"\bfinally\b", " FINALLY "),
     (r"\bnull\b", " NULL "),
     (r"\btrue\b", " TRUE "),
-    (r"[']^\'[']", " STRING "),
-    (r"[\"]^\"[\"]", " STRING "),
+    (r"\'.*\'", " STRING "),
+    (r"\".*\"", " STRING "),
     (r"\n", ""),
     (r"[ ]*\/\/.+", ""),
     # (r"\/\/.+", ""),
@@ -47,7 +47,7 @@ token_list = [
 ]
 
 list_token_capitalized = [
-        (r"\bBREAK\b", " Break "),
+    (r"\bBREAK\b", " Break "),
     (r"\bDEFAULT\b", " Default "),
     (r"\bFOR\b", " For "),
     (r"\bRETURN\b", " Return "),
@@ -69,6 +69,7 @@ list_token_capitalized = [
     (r"\bFINALLY\b", " Finally "),
     (r"\bNULL\b", " Null "),
     (r"\bTRUE\b", " True "),
+    (r"\bSTRING\b", " String "),
 ]
 
 list_operator = [
@@ -179,8 +180,8 @@ def generate_token(file_name):
                 if tag.strip() == tempResult[i]:
                     flag = True
                     break
-            if flag_varname and not flag:
-                curr_word += tempResult[i] + " "
+            if (flag_varname and not flag) or tempResult[i] == 'FALSE' or tempResult[i] == 'TRUE':
+                curr_word = curr_word.rstrip() + tempResult[i] + " "
                 if (
                     i == len(tempResult) - 1
                     or tempResult[i + 1] == "COMMA"
@@ -212,7 +213,7 @@ def generate_token(file_name):
             elif (
                 tempResult[i] == "EQ"
                 or tempResult[i] == "LP"
-                or tempResult[i] == "COLON"
+                # or tempResult[i] == "COLON"
                 or tempResult[i] == "CASE"
             ):
                 list_token = list_token[: len(list_token) - amt + 1]
@@ -220,6 +221,7 @@ def generate_token(file_name):
                 if curr_word != "":
                     list_varname = list_varname[: len(list_varname) - amt]
                     if (flag_expression):
+                        print("YEAAAAAAAAAAAAAAA")
                         list_token.append("VAR_NAME")
                     list_varname.append(curr_word.rstrip())
                 list_token.append(tempResult[i])
@@ -242,13 +244,13 @@ def generate_token(file_name):
                 else:
                     list_token.append(tempResult[i]);
                 curr_word = ""
-                if  tempResult[i] != 'SEMI_COL':
+                if  tempResult[i] == 'RP':
                     flag_expression = False
                     flag_varname = True
             else:
                 if not flag_expression:
                     print("==============", tempResult[i])
-                    if flag and i == len(tempResult) - 1 and tempResult[i] != 'CL' and tempResult[i] != 'CB' and tempResult[i] != 'RP' and tempResult[i] != 'RSB' and tempResult[i] != 'LP' and tempResult[i] != 'LSB':
+                    if flag and i == len(tempResult) - 1 and tempResult[i] != 'CL' and tempResult[i] != 'CB' and tempResult[i] != 'RP' and tempResult[i] != 'RSB' and tempResult[i] != 'LP' and tempResult[i] != 'LSB' and tempResult[i] != 'BREAK' and tempResult[i] != 'CONTINUE' and tempResult[i] != 'RETURN' and tempResult[i] != 'COLON':
                         list_token = list_token[:len(list_token) - amt]
                         list_varname = list_varname[:len(list_varname) - amt]
                         curr_word = curr_word.rstrip() +  tempResult[i]
@@ -264,10 +266,14 @@ def generate_token(file_name):
                         list_token.append(temp_curr_word[0])
                         curr_word =  ""
                     print("BEL", curr_word.split())
-                    if i == len(tempResult) - 1:
+                    if i == len(tempResult) - 1 and tempResult[i] != "COLON":
                         list_token.append("EXPR")
                         list_exp.append(destruct_expr(curr_word.split()))
-                    # list_token.append(tempResult[i])
+                    elif tempResult[i] == "COLON":
+                        temp_expr = curr_word.split()
+                        list_exp.append(destruct_expr(temp_expr[:-1]))
+                        list_token.append("EXPR")
+                        list_token.append(tempResult[i])
                 # tempResult.pop(i)
             print(list_token)
         print(list_token)
