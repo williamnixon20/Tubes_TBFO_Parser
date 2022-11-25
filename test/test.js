@@ -1,3 +1,5 @@
-if ("a" + "a" + "a") {
-    return 0;
+let n = 0;
+
+while (true) {
+    n++;
 }
