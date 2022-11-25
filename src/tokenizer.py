@@ -2,6 +2,7 @@ import re
 import os
 
 token_list = [
+    (r"\?.+\;", " EXPR "),
     # Brackets
     (r"\(", " LP "),
     (r"\)", " RP "),
@@ -45,49 +46,29 @@ token_list = [
     (r"\;", " SEMI_COL "),
 ]
 
-list_operator = [
-    "!",
-    "~",
-    "-",
-    "+",
-    "++",
-    "--",
-    "+",
-    "-",
-    "*",
-    "**",
-    "/",
-    "%",
-    ">>",
-    "<<",
-    ">>>",
-    "==",
-    "===",
-    "!=",
-    "!==",
-    ">",
-    "<",
-    "<=",
-    ">=",
-    "&&",
-    "||",
-    "??",
-    "?",
-    ":",
-    "&",
-    "|",
-    "~",
-    "^",
-    "=",
-    "+=",
-    "-=",
-    "*=",
-    "**=",
-    "/=",
-    "%=",
-    ">>=",
-    "<<=",
-    ">>>=",
+list_token_capitalized = [
+        (r"\bBREAK\b", " Break "),
+    (r"\bDEFAULT\b", " Default "),
+    (r"\bFOR\b", " For "),
+    (r"\bRETURN\b", " Return "),
+    (r"\bVAR\b", " Var "),
+    (r"\bCONST\b", " Const "),
+    (r"\bDELETE\b", " Delete "),
+    (r"\bFUNCTION\b", " Function "),
+    (r"\bSWITCH\b", " Switch "),
+    (r"\bWHILE\b", " While "),
+    (r"\bCASE\b", " Case "),
+    (r"\bELSE\b", " Else "),
+    (r"\bIF\b", " If "),
+    (r"\bTHROW\b", " Throw "),
+    (r"\bCATCH\b", " Catch "),
+    (r"\bFALSE\b", " False "),
+    (r"\bLET\b", " Let "),
+    (r"\bTRY\b", " Try "),
+    (r"\bCONTINUE\b", " Continue "),
+    (r"\bFINALLY\b", " Finally "),
+    (r"\bNULL\b", " Null "),
+    (r"\bTRUE\b", " True "),
 ]
 
 list_operator = [
@@ -135,21 +116,23 @@ list_operator = [
     ">>>=",
 ]
 
-
-def destruct_expr(temp):
-    curr_word = ""
+def destruct_expr(strlist):
+    # print(strlist)
     res = []
-    for i in range(len(temp)):
-        if i == 0:
-            curr_word += temp[i]
-        elif (temp[i] in list_operator and temp[i - 1] not in list_operator) or (
-            temp[i] not in list_operator and temp[i - 1] in list_operator
-        ):
+    for j in range(len(strlist)):
+        curr_word = ''
+        temp = strlist[j]
+        for i in range(len(strlist[j])):
+            if i == 0:
+                curr_word += temp[i]
+            elif (temp[i] in list_operator and temp[i - 1] not in list_operator) or (temp[i] not in list_operator and temp[i - 1] in list_operator):
+                if curr_word != '':
+                    res.append(curr_word)
+                curr_word = temp[i]
+            else:
+                curr_word += temp[i]
+        if curr_word != '':
             res.append(curr_word)
-            curr_word = temp[i]
-        else:
-            curr_word += temp[i]
-    res.append(curr_word)
     return res
 
 
@@ -161,12 +144,16 @@ def generate_token(file_name):
     list_varname_fix = []
     list_exp_fix = []
     for character in characters:
+        print(character)
         # if len(character) == 0 or len(character) == 1:
         #     continue
         list_token = []
         list_varname = []
         list_exp = []
-        result = character
+        result = character.strip()
+        for token in list_token_capitalized:
+            pattern, tag = token
+            result = re.sub(pattern, tag, result)
         for token in token_list:
             pattern, tag = token
             if tag.strip() == "EQ":
@@ -175,13 +162,14 @@ def generate_token(file_name):
                 result = re.sub(pattern, tag, result)
         tempResult = result.split(" ")
         tempResult = [x for x in tempResult if x and x != "\n"]
+        print(tempResult)
         # if len(character) > 1 and tempResult[0] == "//":
         #     continue
         flag_varname = True
         flag_expression = False
         curr_word = ""
         amt = 0
-        print(tempResult)
+        # print(tempResult)
         for i in range(len(tempResult)):
             flag = False
             if tempResult[i] == "//":
@@ -192,7 +180,7 @@ def generate_token(file_name):
                     flag = True
                     break
             if flag_varname and not flag:
-                curr_word += tempResult[i]
+                curr_word += tempResult[i] + " "
                 if (
                     i == len(tempResult) - 1
                     or tempResult[i + 1] == "COMMA"
@@ -201,14 +189,21 @@ def generate_token(file_name):
                     list_token = list_token[: len(list_token) - amt]
                     list_varname = list_varname[: len(list_varname) - amt]
                     if i == 0 or (i != 0 and (tempResult[i - 1] != 'VAR' and tempResult[i - 1] != 'CONST' and tempResult[i - 1] != 'LET')) :
-                        print(tempResult[i - 1])
                         list_token.append("EXPR")
-                        list_exp.append(destruct_expr([x for x in curr_word]))
+                        print("curr", curr_word)
+                        list_exp.append(destruct_expr(
+                        curr_word.split(" ")))
                     else:
                         list_varname.append(tempResult[i])
                         list_token.append("VAR_NAME")
                     curr_word = ""
                     amt = 0
+                elif tempResult[i] == '?':
+                    flag_expression = True
+                    flag_varname = False
+                    list_varname = list_varname[:len(list_varname) - amt]
+                    temp_list_varname = list_varname[len(list_varname) - amt:]
+                    list_exp = list_exp.append(generate_token(curr_word.split(" ")))
                 else:
                     amt += 1
                     list_varname.append(tempResult[i])
@@ -218,31 +213,61 @@ def generate_token(file_name):
                 tempResult[i] == "EQ"
                 or tempResult[i] == "LP"
                 or tempResult[i] == "COLON"
+                or tempResult[i] == "CASE"
             ):
-                list_varname = list_varname[: len(list_varname) - amt]
                 list_token = list_token[: len(list_token) - amt + 1]
+                print("cw1", curr_word.split())
                 if curr_word != "":
+                    list_varname = list_varname[: len(list_varname) - amt]
                     if (flag_expression):
                         list_token.append("VAR_NAME")
-                    list_varname.append(curr_word)
+                    list_varname.append(curr_word.rstrip())
                 list_token.append(tempResult[i])
                 curr_word = ""
                 flag_expression = True
                 flag_varname = False
             elif flag_expression and not flag:
-                curr_word += tempResult[i]
-                if i == len(tempResult) - 1:
-                    list_exp.append(destruct_expr([x for x in curr_word]))
+                curr_word += tempResult[i] + " "
+                print("YEs", curr_word)
+                if i == len(tempResult) - 1 or tempResult[i + 1] == 'RSB':
+                    list_exp.append(destruct_expr(curr_word.split(" ")))
                     list_token.append("EXPR")
-            elif flag_expression and (tempResult[i] == "RP" or tempResult[i] == 'COMMA' or tempResult[i] == 'SEMI_COL') and curr_word != "":
-                list_exp.append(destruct_expr([x for x in curr_word]))
-                list_token.append("EXPR")
-                if tempResult[i] != ';':
-                    list_token.append(tempResult[i])
+            elif flag_expression and (tempResult[i] == "RP" or tempResult[i] == 'COMMA' or tempResult[i] == 'SEMI_COL'):
+                print("CWWW", curr_word.split())
+                if curr_word != "":
+                    list_exp.append(destruct_expr(curr_word.split(" ")))
+                    list_token.append("EXPR")
+                    if tempResult[i] != ';':
+                        list_token.append(tempResult[i])
+                else:
+                    list_token.append(tempResult[i]);
                 curr_word = ""
+                if  tempResult[i] != 'SEMI_COL':
+                    flag_expression = False
+                    flag_varname = True
             else:
-                curr_word = ""
-                list_token.append(tempResult[i])
+                if not flag_expression:
+                    print("==============", tempResult[i])
+                    if flag and i == len(tempResult) - 1 and tempResult[i] != 'CL' and tempResult[i] != 'CB' and tempResult[i] != 'RP' and tempResult[i] != 'RSB' and tempResult[i] != 'LP' and tempResult[i] != 'LSB':
+                        list_token = list_token[:len(list_token) - amt]
+                        list_varname = list_varname[:len(list_varname) - amt]
+                        curr_word = curr_word.rstrip() +  tempResult[i]
+                        list_token.append("VAR_NAME")
+                        list_varname.append(curr_word.rstrip())
+                    else:
+                        list_token.append(tempResult[i])
+                    curr_word = ""
+                else:
+                    curr_word += tempResult[i] + " "
+                    temp_curr_word = curr_word.split()
+                    if temp_curr_word[0] == "LET" or temp_curr_word[0] == "VAR" or temp_curr_word[0] == "CONST":
+                        list_token.append(temp_curr_word[0])
+                        curr_word =  ""
+                    print("BEL", curr_word.split())
+                    if i == len(tempResult) - 1:
+                        list_token.append("EXPR")
+                        list_exp.append(destruct_expr(curr_word.split()))
+                    # list_token.append(tempResult[i])
                 # tempResult.pop(i)
             print(list_token)
         print(list_token)
