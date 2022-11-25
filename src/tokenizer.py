@@ -244,9 +244,6 @@ def generate_token(file_name):
                 if i == len(tempResult) - 1:
                     list_exp.append(destruct_expr([x for x in curr_word]))
                     list_token.append("EXPR")
-                if i + 1 < len(tempResult) and tempResult[i + 1] == "RSB":
-                    list_exp.append(destruct_expr([x for x in curr_word]))
-                    list_token.append("EXPR")
             elif (
                 flag_expression
                 and (
