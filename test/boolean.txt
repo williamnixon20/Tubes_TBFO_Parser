@@ -1,0 +1,6 @@
+let x = false;
+let b = false;
+
+false == 2;
+true === false;
+false === "ok";

@@ -12,6 +12,6 @@ function do_something(x) {
     } else if (x == 32) {
         return 4;
     } else {
-        return "Momen";
+        return "Momen bab";
     }
 }
