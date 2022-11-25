@@ -1,16 +1,17 @@
-import re
+reservedWord = ['break', 'const', 'case', 'catch', 'continue', 
+                'default', 'delete', 'else','finally', 'for', 'function',
+                'if', 'let','return', 'switch', 'throw', 'try', 'var', 'while']
 
 class __FA:
-    def __init__(self, name: str, startState: str, finalState: str, transition):
+    def __init__(self, name: str, startState: str, finalState, transition):
         self.name = name
         self.startState = startState
         self.finalState = finalState
         self.transition = transition
 
-    def evaluate(self, inputs: str):
+    def evaluate(self, inputs):
         currentState = self.startState
         for symbol in inputs:
-            # print(self.name, currentState, symbol)
             currentState = self.transition(currentState, symbol)
             if not currentState:
                 break
@@ -31,12 +32,11 @@ def __isDigit(symbol: str):
     return ('0' <= symbol <= '9')
 
 def __isString(symbol: str):
-    verdict = re.search("\'.+\'", symbol) or re.search("\".+\"", symbol) or symbol == '""' or symbol == "''"
-    if (verdict):
-        print("STRING")
-    else:
-        print("NOT STRING")
-    return verdict
+   return symbol == "STRING" or symbol == '""' or symbol == "''"
+
+def __isBoolean(symbol: str):
+    return symbol == "FALSE" or symbol == "TRUE" or symbol == "NULL"
+
 
 def __transitionFAVariable(state: str, symbol: str):
     if state == 'q0':
@@ -81,8 +81,7 @@ def __transitionFAExp(state: str, symbol: str):
     binaryOp = ['+', '-', '*', '**', '/', '%', '>>', '<<',
                 '>>>', '==', '===', '!=', '!==', '>', '<', '<=', '>=', '&&', '||', '??', '&', '|', '~', '^']
     assignmentOp = ['=', '+=', '-=', '*=',
-                    '**=', '/=', '%=', '>>=', '<<=', '>>>=']
-    print("EXPRESSION", "STATE", state, "SYMBOL", symbol)
+                    '**=', '/=', '%=', '>>=', '<<=', '>>>=', '&=', '^=', '||=', '??=']
     if state == 'q0':
         if isVariable(symbol):
             return 'q1'
@@ -103,17 +102,17 @@ def __transitionFAExp(state: str, symbol: str):
             return 'q7'
         elif symbol in prefixUnaryOp:
             return 'q5'
+        elif isNumber(symbol) or __isString(symbol) or __isBoolean(symbol):
+            return 'q4'
         elif isVariable(symbol):
             return 'q6'
-        elif isNumber(symbol) or __isString(symbol):
-            return 'q4'
     elif state == 'q4':
         return __transitionFAExp('q8', symbol)
     elif state == 'q5':
-        if isVariable(symbol):
-            return 'q6'
-        elif isNumber(symbol) or __isString(symbol):
+        if isNumber(symbol) or __isString(symbol) or __isBoolean(symbol):
             return 'q4'
+        elif isVariable(symbol):
+            return 'q6'
     elif state == 'q6':
         if symbol in incrementDecrement:
             return 'q10'
@@ -148,22 +147,22 @@ def __transitionFAExp(state: str, symbol: str):
             return 'q17'
         elif symbol in prefixUnaryOp:
             return 'q15'
+        elif isNumber(symbol) or __isString(symbol) or __isBoolean(symbol):
+            return 'q14'
         elif isVariable(symbol):
             return 'q16'
-        elif isNumber(symbol) or __isString(symbol):
-            return 'q14'
     elif state == 'q14':
-        if symbol == ':':
+        if symbol == "COLON":
             return 'q0'
         else:
             return __transitionFAExp('q21', symbol)
     elif state == 'q15':
-        if isVariable(symbol):
-            return 'q16'
-        elif isNumber(symbol) or __isString(symbol):
+        if isNumber(symbol) or __isString(symbol) or __isBoolean(symbol):
             return 'q14'
+        elif isVariable(symbol):
+            return 'q16'
     elif state == 'q16':
-        if symbol == ':':
+        if symbol == "COLON":
             return 'q0'
         elif symbol in incrementDecrement:
             return 'q22'
@@ -173,7 +172,7 @@ def __transitionFAExp(state: str, symbol: str):
         if isVariable(symbol):
             return 'q16'
     elif state == 'q18':
-        if symbol == ':':
+        if symbol == "COLON":
             return 'q0'
         elif symbol in assignmentOp:
             return 'q19'
@@ -192,7 +191,7 @@ def __transitionFAExp(state: str, symbol: str):
         elif symbol in binaryOp:
             return 'q20'
     elif state == 'q22':
-        if symbol == ':':
+        if symbol == "COLON":
             return 'q0'
         elif symbol in binaryOp:
             return 'q20'
@@ -208,32 +207,27 @@ __faEXP = __FA("EXPRESSION", 'q0',
 
 
 def isVariable(inputs: str):
-    verdict = __faVAR.evaluate(inputs)
-    if (verdict):
-        print("VARIABLE", inputs, "OK")
+    if not inputs.lower() in reservedWord:
+        verdict = __faVAR.evaluate(inputs)
+        return verdict
     else:
-        print("VARIABLE", inputs, "NOT OK")
-
-    return verdict
+        return False
 
 
 def isNumber(inputs: str):
     verdict = __faNUM.evaluate(inputs)
-    if (verdict):
-        print("NUMBER", inputs, "OK")
-    else:
-        print("NUMBER", inputs, "NOT OK")
-
     return verdict
 
 
-def isExpression(inputs: str):
+def isExpression(inputs):
     return __faEXP.evaluate(inputs)
 
 
 def evalAllVariable(arrInputs: str):
-    return __faVAR.evalAll(arrInputs)
-
+    for var in arrInputs:
+        if not isVariable(var):
+            return False
+    return True
 
 def evalAllNumber(arrInputs: str):
     return __faNUM.evalAll(arrInputs)
@@ -244,12 +238,18 @@ def evalAllExpression(arrInputs: str):
 
 
 def fa(varnames, expressions):
-    if (evalAllVariable(varnames)):
+    print("VARNAMES: ", end="")
+    print(varnames)
+    evalVar = evalAllVariable(varnames)
+    evalExp = evalAllExpression(expressions)
+    if (evalVar):
         print("VARIABLE OK")
     else:
         print("VARIABLE NOT OK")
-    print("\n")
-    if (evalAllExpression(expressions)):
+    print("EXPRESSION: ", end="")
+    print(expressions)
+    if (evalExp):
         print("EXPRESSION OK")
     else:
         print("EXPRESSION NOT OK")
+    return evalVar, evalExp
