@@ -1,0 +1,1 @@
+let babi[5] = arr[i] + 3;

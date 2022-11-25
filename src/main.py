@@ -13,11 +13,9 @@ def check():
 
     grammar = getGrammar("grammar/cfg.txt")
     tokens, varnames, expressions = generate_token(args.file.name)
-    print(tokens)
-    print("======================VERDICT=========================")
+    print("Processing....")
 
     tokens = [x.lower() for x in tokens]
-    print(tokens)
     cyk(tokens, grammar)
     fa(varnames, expressions)
 

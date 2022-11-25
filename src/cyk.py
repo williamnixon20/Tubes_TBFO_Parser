@@ -32,7 +32,6 @@ def process_previous(prev_token_idx, length_dp, token_idx):
                 continue
             ## Add to matrix
             matrix_dp[prev_token_idx][token_idx].add(token_left)
-            print(token_left)
 
 
 def cyk(tokens_arg, grammar_arg):
@@ -56,9 +55,9 @@ def cyk(tokens_arg, grammar_arg):
                 process_previous(prev_token_idx, length_dp, token_idx)
     print(matrix_dp[0][token_length - 1])
     if "VALID" in matrix_dp[0][token_length - 1]:
-        print("OK MANTAB")
+        print("Pass CYK test! Valid secara grammar.")
     else:
-        print("NO")
+        print("Rejected by CYK. Invalid.")
 
 
 if __name__ == "__main__":

@@ -4,3 +4,4 @@ var c = b + d;
 a + b - d;
 c + d - a;
 "string" + 3;
+delete Attr.ok;

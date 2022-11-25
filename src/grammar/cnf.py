@@ -1,13 +1,5 @@
 global_dict = {}
 
-# Read txt
-def readFile(file):
-    new_file = open(file, "r")
-    lines = new_file.readlines()
-    list_bar = [_.replace("->", "").split() for _ in lines]
-    return list_bar
-
-
 def checkUnitProductions(grammar):
     global global_dict
     temp = []
@@ -53,8 +45,10 @@ def handleUnitProductions(unitProductions):
 
 def getGrammar(file):
     global global_dict
-
-    grammar = readFile(file)
+    
+    new_file = open(file, "r")
+    lines = new_file.readlines()
+    grammar = [_.replace("->", "").split() for _ in lines]
 
     for rule in grammar:
         if len(rule) != 0 and rule[0] not in global_dict:

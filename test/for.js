@@ -1,7 +1,4 @@
-let i = 4;
-while (i < 4) {
-    console.log("dsjkflsdf" + 2);
-    i--;
+for (let i = 0; i < 5; i++) {
     if (i == 2) {
         break;
     } else {
