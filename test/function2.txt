@@ -1,0 +1,8 @@
+var height = 5;
+var radius = 3;
+var volume;
+
+function () {
+  var pir2 = Math.PI * radius * radius; 
+  volume = pir2 * height / 3;
+}

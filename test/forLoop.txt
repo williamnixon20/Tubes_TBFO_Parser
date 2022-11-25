@@ -1,0 +1,7 @@
+if (true == vard) {
+
+} else if (vard == 2) {
+
+} else {
+    
+}
